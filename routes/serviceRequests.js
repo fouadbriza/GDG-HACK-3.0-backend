@@ -111,6 +111,30 @@ router.post(
     });
 
     await serviceRequest.save();
+
+    // Auto-message assigned caregivers
+    const patient = await User.findById(req.body.patientId);
+    if (
+      patient &&
+      patient.assignedCaregivers &&
+      patient.assignedCaregivers.length > 0
+    ) {
+      const messageText = `New service request from ${patient.username}: ${req.body.category} - ${req.body.description}`;
+
+      for (const caregiverId of patient.assignedCaregivers) {
+        const caregiver = await Caregiver.findById(caregiverId);
+        if (caregiver) {
+          caregiver.messages.push({
+            senderId: req.body.patientId,
+            content: messageText,
+            type: "service",
+            read: false,
+          });
+          await caregiver.save();
+        }
+      }
+    }
+
     const result = await ServiceRequest.findById(serviceRequest._id)
       .populate("patientId", "username phone email")
       .populate("caregiverId", "username specialization phone");
