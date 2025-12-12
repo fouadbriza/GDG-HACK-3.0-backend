@@ -35,17 +35,38 @@ const CaregiverSchema = new Schema(
       type: Boolean,
       default: false,
     },
-
-    appointments: [
+    availability: [
       {
-        patientName: { type: String, required: true },
-        patientId: { type: Schema.Types.ObjectId, ref: "User" },
-        date: { type: Date, required: true },
-        status: {
+        dayOfWeek: {
           type: String,
-          enum: ["scheduled", "completed", "cancelled"],
-          default: "scheduled",
+          enum: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ],
         },
+        startTime: { type: String },
+        endTime: { type: String },
+      },
+    ],
+    messages: [
+      {
+        senderId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+        content: { type: String, required: true },
+        type: {
+          type: String,
+          enum: ["appointment", "service", "notification"],
+          default: "notification",
+        },
+        read: { type: Boolean, default: false },
+        createdAt: { type: Date, default: Date.now },
       },
     ],
   },

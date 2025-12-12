@@ -30,16 +30,49 @@ const UserSchema = new Schema(
     avatar: { type: String, trim: true },
     phone: { type: String, trim: true },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
-    appointments: [
+    emergencyContact: {
+      name: { type: String, trim: true },
+      phone: { type: String, trim: true },
+    },
+    assignedCaregivers: [
       {
-        caregiverName: { type: String, required: true },
-        caregiverId: { type: Schema.Types.ObjectId, ref: "Caregiver" },
-        date: { type: Date, required: true },
+        type: Schema.Types.ObjectId,
+        ref: "Caregiver",
+      },
+    ],
+    messages: [
+      {
+        senderId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+        content: { type: String, required: true },
+        type: {
+          type: String,
+          enum: ["appointment", "service", "notification"],
+          default: "notification",
+        },
+        read: { type: Boolean, default: false },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    serviceRequests: [
+      {
+        category: {
+          type: String,
+          enum: ["health", "transport", "home care", "groceries"],
+        },
+        description: { type: String, trim: true },
         status: {
           type: String,
-          enum: ["scheduled", "completed", "cancelled"],
-          default: "scheduled",
+          enum: ["pending", "accepted", "completed", "cancelled"],
+          default: "pending",
         },
+        caregiverId: {
+          type: Schema.Types.ObjectId,
+          ref: "Caregiver",
+        },
+        createdAt: { type: Date, default: Date.now },
       },
     ],
   },
@@ -57,6 +90,11 @@ export const validateUpdateUser = (obj) => {
     phone: Joi.string().trim(),
     status: Joi.string().valid("active", "inactive"),
     role: Joi.string().valid("user", "admin", "caregiver"),
+    emergencyContact: Joi.object({
+      name: Joi.string().trim(),
+      phone: Joi.string().trim(),
+    }),
+    assignedCaregivers: Joi.array().items(Joi.string()),
   });
   return schema.validate(obj);
 };
