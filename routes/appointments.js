@@ -9,6 +9,35 @@ import {
 
 const router = Router();
 
+/**
+ * @swagger
+ * /appointments:
+ *   get:
+ *     summary: Get all appointments
+ *     tags: [Appointments]
+ *     responses:
+ *       200:
+ *         description: List of all appointments
+ *   post:
+ *     summary: Create new appointment
+ *     tags: [Appointments]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               caregiverId: { type: string }
+ *               patientId: { type: string }
+ *               date: { type: string, format: date-time }
+ *               notes: { type: string }
+ *     responses:
+ *       201:
+ *         description: Appointment created
+ *       400:
+ *         description: Invalid input
+ */
 router.get(
   "/",
   asyncHandler(async (req, res) => {

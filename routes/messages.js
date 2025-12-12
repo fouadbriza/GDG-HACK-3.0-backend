@@ -15,6 +15,22 @@ const validateSendMessage = (obj) => {
   return schema.validate(obj);
 };
 
+/**
+ * @swagger
+ * /messages/user/{userId}:
+ *   get:
+ *     summary: Get all messages for a user
+ *     tags: [Messages]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: User messages
+ */
 router.get(
   "/user/:userId",
   asyncHandler(async (req, res) => {

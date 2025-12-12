@@ -9,6 +9,16 @@ import bcryptjs from "bcryptjs";
 
 const router = Router();
 
+/**
+ * @swagger
+ * /caregivers:
+ *   get:
+ *     summary: Get all caregivers
+ *     tags: [Caregivers]
+ *     responses:
+ *       200:
+ *         description: List of all caregivers
+ */
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -17,6 +27,24 @@ router.get(
   })
 );
 
+/**
+ * @swagger
+ * /caregivers/{id}:
+ *   get:
+ *     summary: Get caregiver by ID
+ *     tags: [Caregivers]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Caregiver details
+ *       404:
+ *         description: Caregiver not found
+ */
 router.get(
   "/:id",
   asyncHandler(async (req, res) => {

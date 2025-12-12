@@ -10,6 +10,32 @@ import { Caregiver } from "../schemas/Caregiver.js";
 
 const router = Router();
 
+/**
+ * @swagger
+ * /service-requests:
+ *   get:
+ *     summary: Get all service requests
+ *     tags: [Service Requests]
+ *     responses:
+ *       200:
+ *         description: List of service requests
+ *   post:
+ *     summary: Create new service request
+ *     tags: [Service Requests]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               patientId: { type: string }
+ *               category: { type: string, enum: [health, transport, home care, groceries] }
+ *               description: { type: string }
+ *     responses:
+ *       201:
+ *         description: Service request created
+ */
 router.get(
   "/",
   asyncHandler(async (req, res) => {
